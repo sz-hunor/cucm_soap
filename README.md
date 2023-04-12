@@ -123,9 +123,9 @@ construct the headers in the correct format and the values can then be simply mo
 
 The script is meant to be used from the command line with options supplied as arguments
 
-The arguments need to be supplied in the --<argument>=<value> format and are case-sensitive
+The arguments need to be supplied in the ```--<argument>=<value>``` format and are case-sensitive
 
-python cucm_soap.py --<argument>=<value> --<argument>=<value> ...
+python cucm_soap.py ```--<argument>=<value> --<argument>=<value> ...```
 
 ### Options
 
@@ -176,3 +176,10 @@ The script can be used in two "modes":
 -   The preview mode, this is meant to have a way to visually check the JSON like object that would get sent as the request
 body based on the info in an Excel file. For this the syntax is:
     -   ```python soap_cucm.py --excel=<value> --sheet=<value> --preview```
+
+## Warning
+
+This script can be used to send any arbitrary data as any arbitrary AXL SOAP request, needless to say that it has say
+that sending incorrect or incorrectly formatted data can lead to damage
+
+Use caution, use test labs, use test data and familiarize yourself with the quirks of SOAP
