@@ -2,12 +2,15 @@
 
 ## Overview
 
--   The aim of this script is to leverage data in Excel tables to make AXL SOAP requests to Cisco Unified Communications Manager
--   It is intended to be a command line tool, with parameters passed to it via arguments
+The aim of this script is to leverage data in Excel tables to make AXL SOAP requests to Cisco Unified Communications Manager
+
+It is intended to be a command line tool, with parameters passed to it via arguments
 
 ## Capabilities
 
 -   Send an AXL SOAP request per row in an Excel table
+-   Allow for the capabilities of Excel to be utilized in the background for data formatting, the script utilizes the
+actual values in the cells
 -   Create Excel tables and populate them with information returned from AXL SOAP requests
 -   Preview mode
 
@@ -26,6 +29,74 @@ pip install -r requirements.txt
 ```
 -   Download the AXLSoap.xsd and AXLSoap.xsd files from CUCM and place them in the same directory as the script
 
-## Excel Syntax
+## Excel Syntax and Structure
 
--   The AXL SOAP requests use JSON like structures as the bodies of the requests, these can contain items such assssssssssssssssssssssssssssssssssssssssssssssssssssss
+The AXL SOAP requests use JSON like structures as the bodies of the requests, these can contain items such as
+nested objects, lists and None values, Excel on the other hand is a flat data structure.
+The script uses special syntax to help map the complex JSON like structures to Excel and vice-versa.
+  
+-   The first row in the Excel sheet maps to the elements in the SOAP request body
+
+-   The values in each row map to the values of these elements
+
+The script will make a separate AXL SOAP call per row in the Excel table
+
+
+The intention was to keep the values in the data rows free of any special syntactical requirements to keep populating
+it with data as easy as possible
+-   There is one exception to this and that is between empty cells and cells with the None value:
+    - The JSON like structures in the AXL SOAP requests have many elements that are optional, these element can be fully
+omitted. An empty cell has this effect, any elements with no value in the Excel table will simply not be included in the 
+SOAP request body
+    - There is also the case where an element needs to contain the value None, this is to over-write existing data in an
+element. As an example, to delete the description of a phone, a description with the value None can be sent. The syntax
+in the Excel table is to actually write the word "none" in the cell
+
+To map nested objects the ":" symbol can be used in the header, to denote the nested structure
+
+-   For example, the column with the header "top_level:nesting_1:nesting_2:nesting_n" with the value "value" would
+be interpreted as the JSON structure as:
+
+```json
+{
+   "top_level":{
+      "nesting_1":{
+         "nesting_2":{
+            "nesting_n":"value"
+         }
+      }
+   }
+}
+```
+
+Having multiple rows with the same name will get the values of these rows combined into a list
+
+-   For example, a row with header "Header" and value "Value_1" followed by "Header" and "Value_2", "Header" and "Value_3"
+would be interpreted as the JSON structure as:
+
+```json
+{
+   "Header":[
+      "Value_1",
+      "Value_2",
+      "Value_3"
+   ]
+}
+```
+
+The last special syntax is for forcing values to be lists, this is useful for cases where a list with a single item
+needs to be created. This is accomplished by surrounding the header with square brackets
+
+-   For example, a row with header "[Header]" and value "Value_1" would be interpreted as the JSON structure as:
+
+```json
+{
+   "Header":[
+      "Value_1"
+   ]
+}
+```
+
+-   The square brackets can be used for headers of rows with identical names as well that would already be merged into
+lists, adding square brackets around these headers has no impact. This is the format the export function will write headers
+in, if it is a list in the JSON object, it gets square brackets in Excel
