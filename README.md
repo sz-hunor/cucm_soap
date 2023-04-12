@@ -44,12 +44,12 @@ The script will make a separate AXL SOAP call per row in the Excel table
 
 The intention was to keep the values in the data rows free of any special syntactical requirements to keep populating
 it with data as easy as possible
--   There is one exception to this and that is between empty cells and cells with the None value:
+-   There is one exception to this and that is between empty cells and cells with the ```None``` value:
     - The JSON like structures in the AXL SOAP requests have many elements that are optional, these element can be fully
 omitted. An empty cell has this effect, any elements with no value in the Excel table will simply not be included in the 
 SOAP request body
-    - There is also the case where an element needs to contain the value None, this is to over-write existing data in an
-element. As an example, to delete the description of a phone, a description with the value None can be sent. The syntax
+    - There is also the case where an element needs to contain the value ```None```, this is to over-write existing data in an
+element. As an example, to delete the description of a phone, a description with the value ```None``` can be sent. The syntax
 in the Excel table is to actually write the word "none" in the cell
 
 To map nested objects the ":" symbol can be used in the header, to denote the nested structure
