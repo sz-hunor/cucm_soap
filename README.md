@@ -1,5 +1,6 @@
 # cucm_soap
 
+## Setup
 
 -   Download and install python 3
 -   Download and install git
@@ -8,7 +9,7 @@
 ```
 git clone https://github.com/sz-hunor/cucm_soap
 ```
--   Install requirements
+-   Install python script dependencies
 ```
 pip install -r requirements.txt
 ```
