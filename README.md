@@ -32,7 +32,7 @@ pip install -r requirements.txt
 ## Excel Syntax and Structure
 
 The AXL SOAP requests use JSON like structures as the bodies of the requests, these can contain items such as
-nested objects, lists and None values, Excel on the other hand is a flat data structure.
+nested objects, lists and ```None``` values, Excel on the other hand is a flat data structure.
 The script uses special syntax to help map the complex JSON like structures to Excel and vice-versa.
   
 -   The first row in the Excel sheet maps to the elements in the SOAP request body
