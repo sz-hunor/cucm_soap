@@ -100,3 +100,79 @@ needs to be created. This is accomplished by surrounding the header with square 
 -   The square brackets can be used for headers of rows with identical names as well that would already be merged into
 lists, adding square brackets around these headers has no impact. This is the format the export function will write headers
 in, if it is a list in the JSON object, it gets square brackets in Excel
+
+## CUCM AXL schema
+
+The CUCM AXL schema is contained in the AXLSoap.xsd and AXLSoap.xsd file while enum type element options are contained
+in the AXLEnums.xsd file
+
+These files can be opened with tools such as SoapUI, which allow for listing all the AXL SOAP requests available as well
+as how the body of these requests needs to be constructed
+
+An CUCM AXL schema can also be found here: https://developer.cisco.com/docs/axl-schema-reference/
+
+
+Using the methods in the Syntax and Structure section, a valid request body needs to be described. However, most body
+elements are optional and can simply be omitted, and it's possible to construct simpler calls, test them and add
+complexity
+
+Another option is to use one of the get or list requests and save the return to an Excel file, this will automatically
+construct the headers in the correct format and the values can then be simply modified
+
+## Usage and options
+
+The script is meant to be used from the command line with options supplied as arguments
+
+The arguments need to be supplied in the --<argument>=<value> format and are case-sensitive
+
+python cucm_soap.py --<argument>=<value> --<argument>=<value> ...
+
+### Options
+
+-   cucm
+    -   The IP or FQDN of the CUCM
+    -   The script will automatically encapsulate this in "https://"<value>":8443/axl/", if this is not the correct AXL
+interface, modify the script
+
+-   user
+    -   A user on the CUCM with administrator rights and which is AXL enabled
+
+-   pass
+    -   The password of the user
+
+-   excel
+    -   Path and filename of the input Excel file
+
+-   sheet
+    -   Name of the sheet to use from the Excel document
+
+-   action
+    -   Name of the AXL SOAP request, this is case-sensitive and needs to be the exact name of the AXL request described
+in the AXLAPI.wsdl file
+
+-   output
+    -   Path and filename of the output Excel file
+
+-   wsdl
+    -   Path and filename of the AXLAPI.wsdl file, this argument does not need to be provided if the AXLAPI.wsdl is in the
+same directory as the script
+
+-   xsd
+    -   Path and filename of the AXLSoap.xsd file, this argument does not need to be provided if the AXLSoap.xsd is in the
+same directory as the script
+
+-   preview
+    -   This is a switch and takes no argument
+
+## Modes
+
+The script can be used in two "modes":
+
+-   The mode where an actual AXL SOAP request is sent to a CUCM, for this the mandatory parameters are
+    -   ```python soap_cucm.py --cucm=<value> --user=<value> --pass=<value> --excel=<value> --sheet=<value> --action=<value>```
+    -   ```--output=<value>``` is an optional parameter to this syntax
+
+
+-   The preview mode, this is meant to have a way to visually check the JSON like object that would get sent as the request
+body based on the info in an Excel file. For this the syntax is:
+    -   ```python soap_cucm.py --excel=<value> --sheet=<value> --preview```
