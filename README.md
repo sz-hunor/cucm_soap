@@ -119,15 +119,40 @@ complexity
 Another option is to use one of the get or list requests and save the return to an Excel file, this will automatically
 construct the headers in the correct format and the values can then be simply modified
 
+### AXL Versioning
+
+AXL API requests can specify the AXL schema version in the request header SOAPAction: CUCM:DB ver=14.0 as well as in the 
+XML namespace URI for the SOAP Envelope element within body of the request xmlns:ns="http://www.cisco.com/AXL/API/14.0". 
+Both SOAPAction header and the XML namespace URI should indicate the same version. SOAPAction request header is optional 
+but if supplied it supersedes the version specified XML namespace URI. AXL schema version in the XML namespace URI is 
+always required.
+
+The version specified in the AXL API request indicates which AXL schema version the request payload will follow and the 
+response should follow.
+
+CUCM maintains backwards compatibility with the running release minus 2 versions
+
+The versioning for this script is done by simply using copying the correct .wsdl file into the same directory as the script
+or using the ```--wsdl=<file path and name>``` parameter to specify the correct wsdl file for the version of CUCM targeted
+
 ## CUCM AXL Performance
 
-The AXL SOAP Service has dynamic throttling that is always enabled. Upon receiving an AXL write request, the CUCM publisher node via Cisco Database Layer Monitor service dynamically evaluates all database change notification queues across all nodes in the cluster and if any one node has more then 1500 change notification messages pending in its database queues, the AXL write requests will be rejected with a "503 Service Unavailable" response code. Even if the CUCM Cluster is keeping up with change notification processing and DB queues are NOT exceeding a depth of 1500, only 1500 AXL Write requests per minute are allowed.
+The AXL SOAP Service has dynamic throttling that is always enabled. Upon receiving an AXL write request, the CUCM 
+publisher node via Cisco Database Layer Monitor service dynamically evaluates all database change notification queues 
+across all nodes in the cluster and if any one node has more then 1500 change notification messages pending in its database 
+queues, the AXL write requests will be rejected with a "503 Service Unavailable" response code. Even if the CUCM Cluster 
+is keeping up with change notification processing and DB queues are NOT exceeding a depth of 1500, only 1500 AXL Write 
+requests per minute are allowed.
 
-The database change notifications queue can be monitored via the following CUCM Performance Counter on each node (\\cucm\DB Change Notification Server\QueuedRequestsInDB). This counter can be viewed using the Real Time Monitoring Tool (RTMT), but we will also show you how to retrieve CUCM Perfmon Counter values programmatically as well in the next section.
+The database change notifications queue can be monitored via the following CUCM Performance Counter on each node 
+(\\cucm\DB Change Notification Server\QueuedRequestsInDB). This counter can be viewed using the Real Time Monitoring 
+Tool (RTMT), but we will also show you how to retrieve CUCM Perfmon Counter values programmatically as well in the next 
+section.
 
 AXL read requests are NOT throttled even while write requests are being throttled.
 
-In addition to AXL requests throttling, the following AXL query limits are always enforced: A single request is limited to <8MB of data. Concurrent requests are limited to <16MB of data.
+In addition to AXL requests throttling, the following AXL query limits are always enforced: A single request is limited 
+to <8MB of data. Concurrent requests are limited to <16MB of data.
 
 More information can be found here: https://developer.cisco.com/docs/axl/#!axl-developer-guide/data-throttling-and-performance
 
