@@ -132,7 +132,7 @@ response should follow.
 
 CUCM maintains backwards compatibility with the running release minus 2 versions
 
-The versioning for this script is done by simply using copying the correct .wsdl file into the same directory as the script
+The versioning for this script is done by simply copying the correct .wsdl file into the same directory as the script
 or using the ```--wsdl=<file path and name>``` parameter to specify the correct wsdl file for the version of CUCM targeted
 
 ## CUCM AXL Performance
