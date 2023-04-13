@@ -119,6 +119,19 @@ complexity
 Another option is to use one of the get or list requests and save the return to an Excel file, this will automatically
 construct the headers in the correct format and the values can then be simply modified
 
+## CUCM AXL Performance
+
+The AXL SOAP Service has dynamic throttling that is always enabled. Upon receiving an AXL write request, the CUCM publisher node via Cisco Database Layer Monitor service dynamically evaluates all database change notification queues across all nodes in the cluster and if any one node has more then 1500 change notification messages pending in its database queues, the AXL write requests will be rejected with a "503 Service Unavailable" response code. Even if the CUCM Cluster is keeping up with change notification processing and DB queues are NOT exceeding a depth of 1500, only 1500 AXL Write requests per minute are allowed.
+
+The database change notifications queue can be monitored via the following CUCM Performance Counter on each node (\\cucm\DB Change Notification Server\QueuedRequestsInDB). This counter can be viewed using the Real Time Monitoring Tool (RTMT), but we will also show you how to retrieve CUCM Perfmon Counter values programmatically as well in the next section.
+
+AXL read requests are NOT throttled even while write requests are being throttled.
+
+In addition to AXL requests throttling, the following AXL query limits are always enforced: A single request is limited to <8MB of data. Concurrent requests are limited to <16MB of data.
+
+More information can be found here: https://developer.cisco.com/docs/axl/#!axl-developer-guide/data-throttling-and-performance
+
+
 ## Usage and options
 
 The script is meant to be used from the command line with options supplied as arguments
@@ -135,7 +148,7 @@ python cucm_soap.py ```--<argument>=<value> --<argument>=<value> ...```
 interface, modify the script
 
 -   user
-    -   A user on the CUCM with administrator rights and which is AXL enabled
+    -   A user on the CUCM with **Standard AXL API Access** role assigned to it
 
 -   pass
     -   The password of the user
