@@ -202,7 +202,7 @@ def create_excel(dictionary, file, sheet):
         while worksheet.cell(row=next_row, column=j).value:
             j += 1
 
-        worksheet.cell(row=next_row, column=j, value=value)
+        worksheet.cell(row=next_row, column=j, value=str(value))
     workbook.save(file)
 
 
