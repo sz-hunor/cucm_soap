@@ -43,7 +43,7 @@ The script will make a separate AXL SOAP call per row in the Excel table
 
 
 The intention was to keep the values in the data rows free of any special syntactical requirements to keep populating
-it with data as easy as possible
+them with data as straight forward as possible
 -   There is one exception to this and that is between empty cells and cells with the ```None``` value:
     - The JSON like structures in the AXL SOAP requests have many elements that are optional, these element can be fully
 omitted. An empty cell has this effect, any elements with no value in the Excel table will simply not be included in the 
