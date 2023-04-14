@@ -103,6 +103,7 @@ in, if it is a list in the JSON object, it gets square brackets in Excel
 
 For an example Excel file to help visualize some of this simply send a get or list request that will return a fully formatted
 Excel file with actual data.
+
 Example getUser request: ```python soap_cucm.py --cucm=<value> --user=<value> --pass=<value> --json_req="{'name':'<username>'}" --request=getUser```
 
 ## CUCM AXL schema
