@@ -211,7 +211,7 @@ def connect(cucm, username, password, verify, wsdl):
     :param cucm: url or ip of the CUCM to connect to
     :param username: AXL enable username
     :param password: password for the AXL enabled username
-    :param verify: weather the certificate of the server certificate gets verified or not
+    :param verify: weather the server certificate gets verified or not
     :param wsdl: location of the wsdl file
     :return: zeep connection object
     """
