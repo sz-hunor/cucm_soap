@@ -278,7 +278,7 @@ def soap_call(connection, payload, request, element):
 
 def main(argv):
     """
-    :param argv: short arguments must be specified in the format "-<argument>=<value>", long in "--<argument>=<value>"
+    :param argv: short arguments must be specified in the format "-<argument> <value>", long in "--<argument>=<value>"
     """
     urllib3.disable_warnings()  # remove if using certificates to verify connection
 

@@ -161,7 +161,7 @@ More information can be found here: https://developer.cisco.com/docs/axl/#!axl-d
 
 The script is meant to be used from the command line with options supplied as arguments
 
-The arguments need to be supplied in the ```-<argument>=<value>``` format for short notation and in ```--<argument>=<value>```
+The arguments need to be supplied in the ```-<argument> <value>``` format for short notation and in ```--<argument>=<value>```
 for long notation, arguments are case-sensitive
 
 python cucm_soap.py ```-<argument>=<value> -<argument>=<value> ...```
