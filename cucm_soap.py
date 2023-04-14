@@ -306,25 +306,25 @@ def main(argv):
     for opt, arg in opts:
         if opt == "-c" or "--cucm":
             cucm = "https://" + arg + ":8443/axl/"
-        elif opt == "-u" or "--user":
+        elif opt == "-u" or opt == "--user":
             username = arg
-        elif opt == "-p" or "--pass":
+        elif opt == "-p" or opt == "--pass":
             password = arg
-        elif opt == "-e" or "--excel":
+        elif opt == "-e" or opt == "--excel":
             excel = arg
-        elif opt == "-s" or "--sheet":
+        elif opt == "-s" or opt == "--sheet":
             sheet = arg
-        elif opt == "-w" or "--wsdl":
+        elif opt == "-w" or opt == "--wsdl":
             wsdl = arg
-        elif opt == "-x" or "--xsd":
+        elif opt == "-x" or opt == "--xsd":
             xsd = arg
-        elif opt == "-r" or "--request":
+        elif opt == "-r" or opt == "--request":
             request = arg
-        elif "-p" or "--preview" in opt:
+        elif opt == "-p" or opt == "--preview":
             preview = True
-        elif "-o" or "--output" in opt:
+        elif opt == "-o" or opt == "--output":
             output = arg
-        elif "-l" or "--remove_layers" in opt:
+        elif opt == "-l" or opt == "--remove_layers":
             layers = arg
 
     if preview:
