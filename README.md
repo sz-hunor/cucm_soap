@@ -192,6 +192,8 @@ in the AXLAPI.wsdl file
 -   j or req_json
     -   Instead of creating a request from an Excel file, it is possible to simply manually type out the request body in
 JSON format
+    -   Single quotes must be used around every key and value in the JSON object
+    -   Encapsulate the entire JSON object in double quotes if it contains spaces
 
 -   o or output
     -   Path and filename of the output Excel file

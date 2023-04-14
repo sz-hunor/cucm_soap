@@ -297,9 +297,9 @@ def main(argv):
     req_json = ""
 
     try:
-        opts, args = getopt.getopt(argv, "c:u:p:e:s:w:x:r:po:l:", ["cucm=", "user=", "pass=", "excel=", "sheet=",
-                                                                   "wsdl=", "xsd=", "request=", "preview", "output=",
-                                                                   "remove_layers=", "req_json="])
+        opts, args = getopt.getopt(argv, "c:u:p:e:s:w:x:r:po:l:j:", ["cucm=", "user=", "pass=", "excel=", "sheet=",
+                                                                     "wsdl=", "xsd=", "request=", "preview", "output=",
+                                                                     "remove_layers=", "req_json="])
     except getopt.GetoptError as err:
         print(err)
         sys.exit(2)
@@ -342,7 +342,7 @@ def main(argv):
     if cucm and username and password and excel and sheet and wsdl and xsd and request:
         payload = read_excel(excel, sheet)
     elif cucm and username and password and req_json and wsdl and xsd and request:
-        payload = [req_json]
+        payload = [eval(req_json)]
     else:
         print("mandatory parameters missing")
         return
