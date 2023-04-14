@@ -189,6 +189,10 @@ interface, modify the script
     -   Name of the AXL SOAP request, this is case-sensitive and needs to be the exact name of the AXL request described
 in the AXLAPI.wsdl file
 
+-   j or req_json
+    -   Instead of creating a request from an Excel file, it is possible to simply manually type out the request body in
+JSON format
+
 -   o or output
     -   Path and filename of the output Excel file
 
@@ -209,6 +213,8 @@ The script can be used in two "modes":
 
 -   The mode where an actual AXL SOAP request is sent to a CUCM, for this the mandatory parameters are
     -   ```python soap_cucm.py --cucm=<value> --user=<value> --pass=<value> --excel=<value> --sheet=<value> --request=<value>```
+    - or if using the ```--req_json``` argument:
+    - -   ```python soap_cucm.py --cucm=<value> --user=<value> --pass=<value> --json_req=<value> --request=<value>```
     -   ```--output=<value>``` is an optional parameter to this syntax
 
 
