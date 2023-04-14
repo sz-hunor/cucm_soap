@@ -182,6 +182,15 @@ interface, modify the script
 -   e or excel
     -   Path and filename of the input Excel file
 
+-   v or verify
+    -   Controls weather the server certificate is verified or not
+    -   It is an optional argument and if not present server certificate will not be verified
+    -   If present it can either take the value "true", this verifies the server certificate against the default trust 
+anchors or it can be the path and filename to a .PEM or CRT file, this verifies the server certificate against the trust
+anchor specified in the file
+    -   The .PEM or .CRT file must be a bundle, meaning it contains a root CA and an intermediate CA, must be in 
+X.509 ASCII format
+
 -   s or sheet
     -   Name of the sheet to use from the Excel document
 
