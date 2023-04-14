@@ -278,7 +278,7 @@ def soap_call(connection, payload, action, element):
 
 def main(argv):
     """
-    :param argv: arguments must be specified in the format "--<argument>=<value>"
+    :param argv: short arguments must be specified in the format "-<argument>=<value>", long in "--<argument>=<value>"
     """
     urllib3.disable_warnings()  # remove if using certificates to verify connection
 
@@ -296,34 +296,35 @@ def main(argv):
     layers = 2
 
     try:
-        opts, args = getopt.getopt(argv, "", ["cucm=", "user=", "pass=", "excel=", "sheet=", "wsdl=", "xsd=", "action=",
-                                              "preview", "output=", "remove_layers="])
+        opts, args = getopt.getopt(argv, "c:u:p:e:s:w:x:r:po:l:", ["cucm=", "user=", "pass=", "excel=", "sheet=",
+                                                                   "wsdl=", "xsd=", "request=", "preview", "output=",
+                                                                   "remove_layers="])
     except getopt.GetoptError as err:
         print(err)
         sys.exit(2)
 
     for opt, arg in opts:
-        if opt == "--cucm":
+        if opt == "-c" or "--cucm":
             cucm = "https://" + arg + ":8443/axl/"
-        elif opt == "--user":
+        elif opt == "-u" or "--user":
             username = arg
-        elif opt == "--pass":
+        elif opt == "-p" or "--pass":
             password = arg
-        elif opt == "--excel":
+        elif opt == "-e" or "--excel":
             excel = arg
-        elif opt == "--sheet":
+        elif opt == "-s" or "--sheet":
             sheet = arg
-        elif opt == "--wsdl":
+        elif opt == "-w" or "--wsdl":
             wsdl = arg
-        elif opt == "--xsd":
+        elif opt == "-x" or "--xsd":
             xsd = arg
-        elif opt == "--action":
+        elif opt == "-r" or "--request":
             action = arg
-        elif "--preview" in opt:
+        elif "-p" or "--preview" in opt:
             preview = True
-        elif "--output" in opt:
+        elif "-o" or "--output" in opt:
             output = arg
-        elif "--remove_layers" in opt:
+        elif "-l" or "--remove_layers" in opt:
             layers = arg
 
     if preview:

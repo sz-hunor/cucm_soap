@@ -161,45 +161,46 @@ More information can be found here: https://developer.cisco.com/docs/axl/#!axl-d
 
 The script is meant to be used from the command line with options supplied as arguments
 
-The arguments need to be supplied in the ```--<argument>=<value>``` format and are case-sensitive
+The arguments need to be supplied in the ```-<argument>=<value>``` format for short notation and in ```--<argument>=<value>```
+for long notation, arguments are case-sensitive
 
-python cucm_soap.py ```--<argument>=<value> --<argument>=<value> ...```
+python cucm_soap.py ```-<argument>=<value> -<argument>=<value> ...```
 
 ### Options
 
--   cucm
+-   c or cucm
     -   The IP or FQDN of the CUCM
     -   The script will automatically encapsulate this in "https://"<value>":8443/axl/", if this is not the correct AXL
 interface, modify the script
 
--   user
+-   u or user
     -   A user on the CUCM with **Standard AXL API Access** role assigned to it
 
--   pass
+-   p or pass
     -   The password of the user
 
--   excel
+-   e or excel
     -   Path and filename of the input Excel file
 
--   sheet
+-   s or sheet
     -   Name of the sheet to use from the Excel document
 
--   action
+-   r or request
     -   Name of the AXL SOAP request, this is case-sensitive and needs to be the exact name of the AXL request described
 in the AXLAPI.wsdl file
 
--   output
+-   o or output
     -   Path and filename of the output Excel file
 
--   wsdl
+-   w or wsdl
     -   Path and filename of the AXLAPI.wsdl file, this argument does not need to be provided if the AXLAPI.wsdl is in the
 same directory as the script
 
--   xsd
+-   x or xsd
     -   Path and filename of the AXLSoap.xsd file, this argument does not need to be provided if the AXLSoap.xsd is in the
 same directory as the script
 
--   preview
+-   p or preview
     -   This is a switch and takes no argument
 
 ## Modes
@@ -207,7 +208,7 @@ same directory as the script
 The script can be used in two "modes":
 
 -   The mode where an actual AXL SOAP request is sent to a CUCM, for this the mandatory parameters are
-    -   ```python soap_cucm.py --cucm=<value> --user=<value> --pass=<value> --excel=<value> --sheet=<value> --action=<value>```
+    -   ```python soap_cucm.py --cucm=<value> --user=<value> --pass=<value> --excel=<value> --sheet=<value> --request=<value>```
     -   ```--output=<value>``` is an optional parameter to this syntax
 
 
