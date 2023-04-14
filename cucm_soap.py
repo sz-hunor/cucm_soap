@@ -304,7 +304,7 @@ def main(argv):
         sys.exit(2)
 
     for opt, arg in opts:
-        if opt == "-c" or "--cucm":
+        if opt == "-c" or opt == "--cucm":
             cucm = "https://" + arg + ":8443/axl/"
         elif opt == "-u" or opt == "--user":
             username = arg
