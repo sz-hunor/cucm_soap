@@ -179,7 +179,7 @@ python cucm_soap.py ```-<argument>=<value> -<argument>=<value> ...```
 
 -   -c, --cucm
     -   The IP or FQDN of the CUCM
-    -   The script will automatically encapsulate this in "https://"<value>":8443/axl/", if this is not the correct AXL
+    -   The script will automatically encapsulate this in ```"https://"<value>":8443/axl/"```, if this is not the correct AXL
 interface, modify the script
 
 -   -u, --user
