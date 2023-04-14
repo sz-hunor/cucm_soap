@@ -356,7 +356,6 @@ def main(argv):
         except SyntaxError as err:
             print(f"Error in the formatting of the JSON object: {err}")
             sys.exit(2)
-
     else:
         print("Mandatory parameters missing")
         return
