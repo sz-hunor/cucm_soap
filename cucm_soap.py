@@ -215,6 +215,9 @@ def connect(cucm, username, password, verify, wsdl):
     :param wsdl: location of the wsdl file
     :return: zeep connection object
     """
+    if not verify:
+        urllib3.disable_warnings()
+
     session = Session()
     session.verify = verify
     session.auth = HTTPBasicAuth(username, password)
@@ -314,8 +317,6 @@ def main(argv):
             password = arg
         elif opt == "-v" or opt == "--verify":
             verify = arg
-            if not verify:
-                urllib3.disable_warnings()
         elif opt == "-e" or opt == "--excel":
             excel = arg
         elif opt == "-s" or opt == "--sheet":
