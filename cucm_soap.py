@@ -350,6 +350,7 @@ def main(argv):
     connection = connect(cucm, username, password, wsdl)
     check_for_element = check_if_element(request, xsd)
     result = soap_call(connection, payload, request, check_for_element)
+
     if output:
         for dictionary in result:
             write_excel(dictionary, file=output, sheet=request, layers=layers)
