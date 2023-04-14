@@ -294,11 +294,12 @@ def main(argv):
     preview = ""
     output = ""
     layers = 2
+    req_json = ""
 
     try:
         opts, args = getopt.getopt(argv, "c:u:p:e:s:w:x:r:po:l:", ["cucm=", "user=", "pass=", "excel=", "sheet=",
                                                                    "wsdl=", "xsd=", "request=", "preview", "output=",
-                                                                   "remove_layers="])
+                                                                   "remove_layers=", "req_json="])
     except getopt.GetoptError as err:
         print(err)
         sys.exit(2)
@@ -326,6 +327,8 @@ def main(argv):
             output = arg
         elif opt == "-l" or opt == "--remove_layers":
             layers = arg
+        elif opt == "-j" or opt == "--req_json":
+            req_json = arg
 
     if preview:
         if all(excel and sheet):
@@ -338,14 +341,18 @@ def main(argv):
 
     if cucm and username and password and excel and sheet and wsdl and xsd and request:
         payload = read_excel(excel, sheet)
-        connection = connect(cucm, username, password, wsdl)
-        check_for_element = check_if_element(request, xsd)
-        result = soap_call(connection, payload, request, check_for_element)
-        if output:
-            for dictionary in result:
-                write_excel(dictionary, file=output, sheet=request, layers=layers)
+    elif cucm and username and password and req_json and wsdl and xsd and request:
+        payload = [req_json]
     else:
         print("mandatory parameters missing")
+        return
+
+    connection = connect(cucm, username, password, wsdl)
+    check_for_element = check_if_element(request, xsd)
+    result = soap_call(connection, payload, request, check_for_element)
+    if output:
+        for dictionary in result:
+            write_excel(dictionary, file=output, sheet=request, layers=layers)
 
 
 if __name__ == '__main__':
