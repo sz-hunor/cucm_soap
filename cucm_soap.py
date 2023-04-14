@@ -99,7 +99,7 @@ def write_excel(dictionary, file, sheet, layers):
     elif isinstance(dictionary, dict):
         create_excel(flatten_dict(dictionary), file, sheet)
     elif isinstance(dictionary, str) or dictionary is None:
-        print(f"return: '{dictionary}' does not contain enough data to add to output")
+        print(f"Return: '{dictionary}' does not contain enough data to add to output")
 
 
 def remove_nesting(dictionary, layers):
@@ -267,8 +267,8 @@ def soap_call(connection, payload, request, element):
                 result = getattr(connection, request)(**item)
             else:
                 result = getattr(connection, request)(item)
-            print(f"information in row {row_count} submitted")
-            print(f"return: {result['return']}")
+            print(f"Information in row {row_count} submitted")
+            print(f"Return: {result['return']}")
             result_list.append(serialize_object(result, target_cls=dict))
         except Exception as error:
             print(f"Error adding line: {str(error)}")
@@ -336,7 +336,7 @@ def main(argv):
             print(json.dumps(payload, indent=4))
             return
         else:
-            print("preview mode: mandatory parameters missing")
+            print("Preview mode: mandatory parameters missing")
             return
 
     if cucm and username and password and excel and sheet and wsdl and xsd and request:
@@ -345,11 +345,11 @@ def main(argv):
         try:
             payload = [eval(req_json)]
         except SyntaxError as err:
-            print(f"error in the formatting of the JSON object: {err}")
+            print(f"Error in the formatting of the JSON object: {err}")
             sys.exit(2)
 
     else:
-        print("mandatory parameters missing")
+        print("Mandatory parameters missing")
         return
 
     connection = connect(cucm, username, password, wsdl)
