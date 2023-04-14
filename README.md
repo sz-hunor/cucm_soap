@@ -188,7 +188,7 @@ interface, modify the script
     -   If present it can either take the value "true", this verifies the server certificate against the default trust 
 anchors or it can be the path and filename to a .PEM or CRT file, this verifies the server certificate against the trust
 anchor specified in the file
-    -   The .PEM or .CRT file must be a bundle, meaning it contains a root CA and an intermediate CA, must be in 
+    -   The .PEM or .CRT file must be a bundle, meaning it contains a root CA and an intermediate CA and must be in 
 X.509 ASCII format
 
 -   s or sheet
