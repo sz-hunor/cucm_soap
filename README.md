@@ -227,6 +227,7 @@ The script can be used in two "modes":
     - or if using the ```--req_json``` argument:
     - -   ```python soap_cucm.py --cucm=<value> --user=<value> --pass=<value> --json_req=<value> --request=<value>```
     -   ```--output=<value>``` is an optional parameter to this syntax
+    -   ```--verify=("true"|<value>)``` is an optional parameter to this syntax
 
 
 -   The preview mode, this is meant to have a way to visually check the JSON like object that would get sent as the request
