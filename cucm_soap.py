@@ -342,7 +342,12 @@ def main(argv):
     if cucm and username and password and excel and sheet and wsdl and xsd and request:
         payload = read_excel(excel, sheet)
     elif cucm and username and password and req_json and wsdl and xsd and request:
-        payload = [eval(req_json)]
+        try:
+            payload = [eval(req_json)]
+        except SyntaxError as err:
+            print(err)
+            sys.exit(2)
+
     else:
         print("mandatory parameters missing")
         return
