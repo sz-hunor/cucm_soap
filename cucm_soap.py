@@ -316,10 +316,10 @@ def main(argv):
         elif opt == "-p" or opt == "--pass":
             password = arg
         elif opt == "-v" or opt == "--verify":
-            if arg:
-                verify = arg
-            else:
+            if arg.lower() == "true":
                 verify = True
+            else:
+                verify = arg
         elif opt == "-e" or opt == "--excel":
             excel = arg
         elif opt == "-s" or opt == "--sheet":
