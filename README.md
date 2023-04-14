@@ -226,7 +226,7 @@ body based on the info in an Excel file. For this the syntax is:
 
 ## Warning
 
-This script can be used to send any arbitrary data as any arbitrary AXL SOAP request, needless to say that it has say
-that sending incorrect or incorrectly formatted data can lead to damage
+This script can be used to send any arbitrary data as any arbitrary AXL SOAP request, it is completely possibly to
+over-write, delete or otherwise damage existing configuration
 
 Use caution, use test labs, use test data and familiarize yourself with the quirks of SOAP
