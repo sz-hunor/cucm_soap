@@ -223,19 +223,19 @@ def connect(cucm, username, password, wsdl):
     return service
 
 
-def check_if_element(action, xsd):
+def check_if_element(request, xsd):
     """
     For reasons known only to the gods and cisco, if the soap function call contains certain elements, when sending
     the request, the request body needs to be sent as actual arguments instead of a JSON-like object
     This function checks in the xsd file if the submitted soap call contains any from a list of elements
-    :param action: soap function call to be checked
+    :param request: soap function call to be checked
     :param xsd: xml schema file to check against
     :return: True if any of the elements were found, otherwise False
     """
     xsd_ns = {"xsd": "http://www.w3.org/2001/XMLSchema"}
     tree = etree.parse(xsd)
 
-    element = tree.xpath(f'//xsd:element[@name="{action}"]', namespaces=xsd_ns)
+    element = tree.xpath(f'//xsd:element[@name="{request}"]', namespaces=xsd_ns)
     complex_type_ref = element[0].get("type").split(":")[1]
     complex_type = tree.xpath(f'//xsd:complexType[@name="{complex_type_ref}"]', namespaces=xsd_ns)
     complex_type_str = etree.tostring(complex_type[0], pretty_print=True).decode("utf-8")
@@ -246,14 +246,14 @@ def check_if_element(action, xsd):
         return False
 
 
-def soap_call(connection, payload, action, element):
+def soap_call(connection, payload, request, element):
     """
     Makes the SOAP request
     AXL/SOAP is a provisioning and configuration API, not a real-time API, beware that an attempt to make too many
     requests in quick succession could be throttled
     :param connection: zeep connection object
     :param payload: list of json-like nested dictionaries
-    :param action: SOAP function call
+    :param request: SOAP function call
     :param element: Boolean return of the check_if_element() function
     :return: possibly pain, possibly extra free time
     """
@@ -264,9 +264,9 @@ def soap_call(connection, payload, action, element):
 
         try:
             if element:
-                result = getattr(connection, action)(**item)
+                result = getattr(connection, request)(**item)
             else:
-                result = getattr(connection, action)(item)
+                result = getattr(connection, request)(item)
             print(f"information in row {row_count} submitted")
             print(f"return: {result['return']}")
             result_list.append(serialize_object(result, target_cls=dict))
@@ -290,7 +290,7 @@ def main(argv):
     sheet = ""
     wsdl = "AXLAPI.wsdl"
     xsd = "AXLSoap.xsd"
-    action = ""
+    request = ""
     preview = ""
     output = ""
     layers = 2
@@ -319,7 +319,7 @@ def main(argv):
         elif opt == "-x" or "--xsd":
             xsd = arg
         elif opt == "-r" or "--request":
-            action = arg
+            request = arg
         elif "-p" or "--preview" in opt:
             preview = True
         elif "-o" or "--output" in opt:
@@ -336,14 +336,14 @@ def main(argv):
             print("preview mode: mandatory parameters missing")
             return
 
-    if cucm and username and password and excel and sheet and wsdl and xsd and action:
+    if cucm and username and password and excel and sheet and wsdl and xsd and request:
         payload = read_excel(excel, sheet)
         connection = connect(cucm, username, password, wsdl)
-        check_for_element = check_if_element(action, xsd)
-        result = soap_call(connection, payload, action, check_for_element)
+        check_for_element = check_if_element(request, xsd)
+        result = soap_call(connection, payload, request, check_for_element)
         if output:
             for dictionary in result:
-                write_excel(dictionary, file=output, sheet=action, layers=layers)
+                write_excel(dictionary, file=output, sheet=request, layers=layers)
     else:
         print("mandatory parameters missing")
 
