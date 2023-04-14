@@ -206,16 +206,17 @@ def create_excel(dictionary, file, sheet):
     workbook.save(file)
 
 
-def connect(cucm, username, password, wsdl):
+def connect(cucm, username, password, verify, wsdl):
     """
     :param cucm: url or ip of the CUCM to connect to
     :param username: AXL enable username
     :param password: password for the AXL enabled username
+    :param verify: weather the certificate of the server certificate gets verified or not
     :param wsdl: location of the wsdl file
     :return: zeep connection object
     """
     session = Session()
-    session.verify = False  # path to PEM or CRT file can be added for certificate verification, must be bundle
+    session.verify = verify
     session.auth = HTTPBasicAuth(username, password)
     transport = Transport(session=session, timeout="none", cache=SqliteCache())
     client = Client(wsdl, transport=transport)
@@ -280,12 +281,12 @@ def main(argv):
     """
     :param argv: short arguments must be specified in the format "-<argument> <value>", long in "--<argument>=<value>"
     """
-    urllib3.disable_warnings()  # remove if using certificates to verify connection
 
     # default values can be specified in this section
     cucm = ""
     username = ""
     password = ""
+    verify = False
     excel = ""
     sheet = ""
     wsdl = "AXLAPI.wsdl"
@@ -297,9 +298,9 @@ def main(argv):
     req_json = ""
 
     try:
-        opts, args = getopt.getopt(argv, "c:u:p:e:s:w:x:r:po:l:j:", ["cucm=", "user=", "pass=", "excel=", "sheet=",
-                                                                     "wsdl=", "xsd=", "request=", "preview", "output=",
-                                                                     "remove_layers=", "req_json="])
+        opts, args = getopt.getopt(argv, "c:u:p:v:e:s:w:x:r:po:l:j:", ["cucm=", "user=", "pass=", "verify=", "excel=",
+                                                                       "sheet=", "wsdl=", "xsd=", "request=", "preview",
+                                                                       "output=", "remove_layers=", "req_json="])
     except getopt.GetoptError as err:
         print(err)
         sys.exit(2)
@@ -311,6 +312,10 @@ def main(argv):
             username = arg
         elif opt == "-p" or opt == "--pass":
             password = arg
+        elif opt == "-v" or opt == "--verify":
+            verify = arg
+            if not verify:
+                urllib3.disable_warnings()
         elif opt == "-e" or opt == "--excel":
             excel = arg
         elif opt == "-s" or opt == "--sheet":
@@ -352,7 +357,7 @@ def main(argv):
         print("Mandatory parameters missing")
         return
 
-    connection = connect(cucm, username, password, wsdl)
+    connection = connect(cucm, username, password, verify, wsdl)
     check_for_element = check_if_element(request, xsd)
     result = soap_call(connection, payload, request, check_for_element)
 
