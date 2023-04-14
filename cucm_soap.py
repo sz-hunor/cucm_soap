@@ -345,7 +345,7 @@ def main(argv):
         try:
             payload = [eval(req_json)]
         except SyntaxError as err:
-            print(err)
+            print(f"error in the formatting of the JSON object: {err}")
             sys.exit(2)
 
     else:
