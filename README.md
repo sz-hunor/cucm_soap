@@ -168,21 +168,21 @@ python cucm_soap.py ```-<argument>=<value> -<argument>=<value> ...```
 
 ### Options
 
--   c or cucm
+-   -c, --cucm
     -   The IP or FQDN of the CUCM
     -   The script will automatically encapsulate this in "https://"<value>":8443/axl/", if this is not the correct AXL
 interface, modify the script
 
--   u or user
+-   -u, --user
     -   A user on the CUCM with **Standard AXL API Access** role assigned to it
 
--   p or pass
+-   -p, --pass
     -   The password of the user
 
--   e or excel
+-   -e, --excel
     -   Path and filename of the input Excel file
 
--   v or verify
+-   -v, --verify
     -   Controls weather the server certificate is verified or not
     -   It is an optional argument and if not present server certificate will not be verified
     -   If present it can either take the value "true", this verifies the server certificate against the default trust 
@@ -191,31 +191,31 @@ anchor specified in the file
     -   The .PEM or .CRT file must be a bundle, meaning it contains a root CA and an intermediate CA and must be in 
 X.509 ASCII format
 
--   s or sheet
+-   -s, --sheet
     -   Name of the sheet to use from the Excel document
 
--   r or request
+-   -r, --request
     -   Name of the AXL SOAP request, this is case-sensitive and needs to be the exact name of the AXL request described
 in the AXLAPI.wsdl file
 
--   j or req_json
+-   -j, --req_json
     -   Instead of creating a request from an Excel file, it is possible to simply manually type out the request body in
 JSON format
     -   Single quotes must be used around every key and value in the JSON object
     -   Encapsulate the entire JSON object in double quotes if it contains spaces
 
--   o or output
+-   -o, --output
     -   Path and filename of the output Excel file
 
--   w or wsdl
+-   -w, --wsdl
     -   Path and filename of the AXLAPI.wsdl file, this argument does not need to be provided if the AXLAPI.wsdl is in the
 same directory as the script
 
--   x or xsd
+-   -x, --xsd
     -   Path and filename of the AXLSoap.xsd file, this argument does not need to be provided if the AXLSoap.xsd is in the
 same directory as the script
 
--   p or preview
+-   -p, --preview
     -   This is a switch and takes no argument
 
 ## Modes
