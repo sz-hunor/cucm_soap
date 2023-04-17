@@ -157,6 +157,9 @@ def create_excel(dictionary, file, sheet):
     except FileNotFoundError:
         workbook = openpyxl.Workbook()
         del workbook["Sheet"]
+    except openpyxl.utils.exceptions.InvalidFileException as err:
+        print(f"{datetime.now().strftime('%b %d %H:%M:%S')}: {err}")
+        sys.exit(2)
 
     if sheet in workbook.sheetnames:
         worksheet = workbook[sheet]
