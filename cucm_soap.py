@@ -276,7 +276,7 @@ def soap_call(connection, payload, request, element):
             else:
                 result = getattr(connection, request)(item)
             print(f"{datetime.now().strftime('%b %d %H:%M:%S')}: Information in row {row_count} submitted")
-            print(f"Return: {result['return']}")
+            print(f"{datetime.now().strftime('%b %d %H:%M:%S')}: Return: {result['return']}")
             result_list.append(serialize_object(result, target_cls=dict))
         except Exception as error:
             print(f"{datetime.now().strftime('%b %d %H:%M:%S')}: Error adding line: {str(error)}")
