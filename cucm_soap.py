@@ -1,3 +1,4 @@
+from datetime import datetime
 from lxml import etree
 from requests import Session
 from requests.auth import HTTPBasicAuth
@@ -26,7 +27,7 @@ def read_excel(file, sheet):
         headers = [cell.value.split(":") for cell in openpyxl.load_workbook(file, data_only=True)[sheet][1]]
         row = [[cell.value for cell in row] for row in openpyxl.load_workbook(file, data_only=True)[sheet].iter_rows(min_row=2)]
     except (openpyxl.utils.exceptions.InvalidFileException, KeyError, FileNotFoundError) as err:
-        print(err)
+        print(f"{datetime.now().strftime('%b %d %H:%M:%S')}: {err}")
         sys.exit(2)
 
     for cell in row:
@@ -99,7 +100,7 @@ def write_excel(dictionary, file, sheet, layers):
     elif isinstance(dictionary, dict):
         create_excel(flatten_dict(dictionary), file, sheet)
     elif isinstance(dictionary, str) or dictionary is None:
-        print(f"Return: '{dictionary}' does not contain enough data to add to output")
+        print(f"{datetime.now().strftime('%b %d %H:%M:%S')}: Return: '{dictionary}' does not contain enough data to add to output")
 
 
 def remove_nesting(dictionary, layers):
@@ -271,11 +272,11 @@ def soap_call(connection, payload, request, element):
                 result = getattr(connection, request)(**item)
             else:
                 result = getattr(connection, request)(item)
-            print(f"Information in row {row_count} submitted")
+            print(f"{datetime.now().strftime('%b %d %H:%M:%S')}: Information in row {row_count} submitted")
             print(f"Return: {result['return']}")
             result_list.append(serialize_object(result, target_cls=dict))
         except Exception as error:
-            print(f"Error adding line: {str(error)}")
+            print(f"{datetime.now().strftime('%b %d %H:%M:%S')}: Error adding line: {str(error)}")
             result_list.append({"return": None})
     return result_list
 
@@ -305,7 +306,7 @@ def main(argv):
                                                                        "sheet=", "wsdl=", "xsd=", "request=", "preview",
                                                                        "output=", "remove_layers=", "req_json="])
     except getopt.GetoptError as err:
-        print(err)
+        print(f"{datetime.now().strftime('%b %d %H:%M:%S')}: {err}")
         sys.exit(2)
 
     for opt, arg in opts:
@@ -342,10 +343,10 @@ def main(argv):
     if preview:
         if all(excel and sheet):
             payload = read_excel(excel, sheet)
-            print(json.dumps(payload, indent=4))
+            print(f"{datetime.now().strftime('%b %d %H:%M:%S')}: {json.dumps(payload, indent=4)}")
             return
         else:
-            print("Preview mode: mandatory parameters missing")
+            print(f"{datetime.now().strftime('%b %d %H:%M:%S')}: Preview mode: mandatory parameters missing")
             return
 
     if cucm and username and password and excel and sheet and wsdl and xsd and request:
@@ -354,10 +355,10 @@ def main(argv):
         try:
             payload = [eval(req_json)]
         except SyntaxError as err:
-            print(f"Error in the formatting of the JSON object: {err}")
+            print(f"{datetime.now().strftime('%b %d %H:%M:%S')}: Error in the formatting of the JSON object: {err}")
             sys.exit(2)
     else:
-        print("Mandatory parameters missing")
+        print(f"{datetime.now().strftime('%b %d %H:%M:%S')}: Mandatory parameters missing")
         return
 
     connection = connect(cucm, username, password, verify, wsdl)
