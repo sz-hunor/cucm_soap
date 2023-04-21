@@ -200,13 +200,13 @@ def create_excel(dictionary, file, sheet):
         except ValueError:
             value = ""
 
-        j = i + 1
-        while worksheet.cell(row=1, column=j).value != header:
-            j += 1
-        while worksheet.cell(row=next_row, column=j).value:
-            j += 1
+        locate = i + 1
+        while worksheet.cell(row=1, column=locate).value != header:
+            locate += 1
+        while worksheet.cell(row=next_row, column=locate).value:
+            locate += 1
 
-        worksheet.cell(row=next_row, column=j, value=str(value))
+        worksheet.cell(row=next_row, column=locate, value=str(value))
     workbook.save(file)
 
 
@@ -265,17 +265,14 @@ def soap_call(connection, payload, request, element):
     :param element: Boolean return of the check_if_element() function
     :return: possibly pain, possibly extra free time
     """
-    row_count = 1
     result_list = []
-    for item in payload:
-        row_count += 1
-
+    for row, item in enumerate(payload):
         try:
             if element:
                 result = getattr(connection, request)(**item)
             else:
                 result = getattr(connection, request)(item)
-            print(f"{datetime.now().strftime('%b %d %H:%M:%S')}: Information in row {row_count} submitted")
+            print(f"{datetime.now().strftime('%b %d %H:%M:%S')}: Information in row {row + 1} submitted")
             print(f"{datetime.now().strftime('%b %d %H:%M:%S')}: Return: {result['return']}")
             result_list.append(serialize_object(result, target_cls=dict))
         except Exception as error:
