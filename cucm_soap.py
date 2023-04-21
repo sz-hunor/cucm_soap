@@ -161,19 +161,21 @@ def create_excel(dictionary, file, sheet):
         print(f"{datetime.now().strftime('%b %d %H:%M:%S')}: ERROR: {err}")
         sys.exit(2)
 
+    # if default "sheet" exists, delete it
     if sheet in workbook.sheetnames:
         worksheet = workbook[sheet]
     else:
         worksheet = workbook.create_sheet(sheet)
 
+    # read in headers if they exist
     existing_headers = []
-
     for cell in worksheet[1]:
         if cell.value is None:
             continue
         else:
             existing_headers.append(cell.value)
 
+    # append any new headers to existing headers
     new_headers = existing_headers.copy()
     for key in dictionary.keys():
         if re.search(r"_\d+$", key):
@@ -181,32 +183,34 @@ def create_excel(dictionary, file, sheet):
         if key not in existing_headers:
             new_headers.append(key)
 
-    for i, header in enumerate(new_headers):
-        worksheet.cell(row=1, column=i + 1, value=header)
+    # write header row to file
+    for header_index, header in enumerate(new_headers):
+        worksheet.cell(row=1, column=header_index + 1, value=header)
 
-    dictionary_keys = []
-    dictionary_values = []
+    # unpack the dictionary into a list of headers and values
+    row_header = []
+    row_value = []
     for key, value in dictionary.items():
         if re.search(r"_\d+$", key):
             key = re.sub(r"_\d+$", "", key)
-        dictionary_keys.append(key)
-        dictionary_values.append(value)
+        row_header.append(key)
+        row_value.append(value)
 
-    next_row = worksheet.max_row + 1
-
-    for i, header in enumerate(new_headers):
+    # find where to write row_value based on matching row_header to an item in new_headers and iterate rows
+    for header_index, header in enumerate(new_headers):
         try:
-            value = dictionary_values[dictionary_keys.index(header)]
+            value = row_value[row_header.index(header)]
         except ValueError:
             value = ""
 
-        locate = i + 1
+        locate = header_index + 1
         while worksheet.cell(row=1, column=locate).value != header:
             locate += 1
-        while worksheet.cell(row=next_row, column=locate).value:
+        while worksheet.cell(row=worksheet.max_row + 1, column=locate).value:
             locate += 1
+        worksheet.cell(row=worksheet.max_row + 1, column=locate, value=str(value))
 
-        worksheet.cell(row=next_row, column=locate, value=str(value))
+    # save everything when done
     workbook.save(file)
 
 
