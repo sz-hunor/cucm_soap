@@ -104,7 +104,7 @@ in, if it is a list in the JSON object, it gets square brackets in Excel
 For an example Excel file to help visualize some of this simply send a get or list request that will return a fully formatted
 Excel file with actual data
 
-Example getUser request: ```python soap_cucm.py --cucm=<value> --user=<value> --pass=<value> --json_req="{'name':'<username>'}" --request=getUser --output=<value>```
+Example getUser request: ```python soap_cucm.py --cucm=<value> --user=<value> --pass=<value> --req_json="{'name':'<username>'}" --request=getUser --output=<value>```
 
 Running this will also print out the returned JSON object, that can then be contrasted to the data in the Excel to better
 understand the syntax
@@ -234,7 +234,7 @@ The script can be used in two "modes":
 -   The mode where an actual AXL SOAP request is sent to a CUCM, for this the mandatory parameters are
     -   ```python soap_cucm.py --cucm=<value> --user=<value> --pass=<value> --excel=<value> --sheet=<value> --request=<value>```
     - or if using the ```--req_json``` argument:
-    - -   ```python soap_cucm.py --cucm=<value> --user=<value> --pass=<value> --json_req=<value> --request=<value>```
+    - -   ```python soap_cucm.py --cucm=<value> --user=<value> --pass=<value> --req_json=<value> --request=<value>```
     -   ```--output=<value>``` is an optional parameter to this syntax
     -   ```--verify=("true"|<value>)``` is an optional parameter to this syntax
 

@@ -152,6 +152,7 @@ def create_excel(dictionary, file, sheet):
     :param file: name of the file to write to
     :param sheet: name of the sheet to write to
     """
+    # if default "Sheet" exists, delete it
     try:
         workbook = openpyxl.load_workbook(file)
     except FileNotFoundError:
@@ -161,7 +162,7 @@ def create_excel(dictionary, file, sheet):
         print(f"{datetime.now().strftime('%b %d %H:%M:%S')}: ERROR: {err}")
         sys.exit(2)
 
-    # if default "sheet" exists, delete it
+    # switch to sheet or create it if it doesn't exist
     if sheet in workbook.sheetnames:
         worksheet = workbook[sheet]
     else:
