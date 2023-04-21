@@ -197,6 +197,7 @@ def create_excel(dictionary, file, sheet):
         row_value.append(value)
 
     # find where to write row_value based on matching row_header to an item in new_headers and iterate rows
+    next_row = worksheet.max_row + 1
     for header_index, header in enumerate(new_headers):
         try:
             value = row_value[row_header.index(header)]
@@ -206,9 +207,9 @@ def create_excel(dictionary, file, sheet):
         locate = header_index + 1
         while worksheet.cell(row=1, column=locate).value != header:
             locate += 1
-        while worksheet.cell(row=worksheet.max_row + 1, column=locate).value:
+        while worksheet.cell(row=next_row, column=locate).value:
             locate += 1
-        worksheet.cell(row=worksheet.max_row + 1, column=locate, value=str(value))
+        worksheet.cell(row=next_row, column=locate, value=str(value))
 
     # save everything when done
     workbook.save(file)
