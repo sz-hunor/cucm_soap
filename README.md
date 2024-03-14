@@ -155,8 +155,7 @@ requests per minute are allowed.
 
 The database change notifications queue can be monitored via the following CUCM Performance Counter on each node 
 (\\cucm\DB Change Notification Server\QueuedRequestsInDB). This counter can be viewed using the Real Time Monitoring 
-Tool (RTMT), but we will also show you how to retrieve CUCM Perfmon Counter values programmatically as well in the next 
-section.
+Tool (RTMT).
 
 AXL read requests are NOT throttled even while write requests are being throttled.
 
