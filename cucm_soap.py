@@ -92,17 +92,17 @@ def write_excel(dictionary, file, sheet, layers):
     :param sheet: name of the sheet to write to
     :param layers: number of layers in the dictionary encapsulating the useful data
     """
-    dictionary = remove_nesting(dictionary, layers)
 
-    if isinstance(dictionary, list):
-        for item in dictionary:
-            create_excel(flatten_dict(item), file, sheet)
-    elif isinstance(dictionary, dict):
-        create_excel(flatten_dict(dictionary), file, sheet)
-    elif isinstance(dictionary, str) or dictionary is None:
-        print(f"{datetime.now().strftime('%b %d %H:%M:%S')}: ERROR: Return: '{dictionary}' does not contain enough data to add to output")
+    for key, value in dictionary['return'].items():
+        if isinstance(value, list):
+            for item in value:
+                create_excel(flatten_dict(item), file, sheet)
+        elif isinstance(value, dict):
+            create_excel(flatten_dict(value), file, sheet)
+        elif isinstance(value, str) or value is None:
+            print(f"{datetime.now().strftime('%b %d %H:%M:%S')}: ERROR: Return: '{value}' does not contain enough data to add to output")
 
-
+            
 def remove_nesting(dictionary, layers):
     """
     :param dictionary: dictionaries structured as JSON-like objects
@@ -246,18 +246,26 @@ def check_if_element(request, xsd):
     :param xsd: xml schema file to check against
     :return: True if any of the elements were found, otherwise False
     """
+
+    request_xml_schema = get_xml_schema(request, xsd)
+
+    if any(request_xml_schema.count(key_element) > 0 for key_element in ["choice", "searchCriteria", "SQL"]):
+        return True
+    else:
+        return False
+
+
+def get_xml_schema(request, xsd):
+    #parses lxml.etree elements to string based on provided xsd
     xsd_ns = {"xsd": "http://www.w3.org/2001/XMLSchema"}
     tree = etree.parse(xsd)
 
     element = tree.xpath(f'//xsd:element[@name="{request}"]', namespaces=xsd_ns)
     complex_type_ref = element[0].get("type").split(":")[1]
     complex_type = tree.xpath(f'//xsd:complexType[@name="{complex_type_ref}"]', namespaces=xsd_ns)
-    complex_type_str = etree.tostring(complex_type[0], pretty_print=True).decode("utf-8")
 
-    if any(complex_type_str.count(key_element) > 0 for key_element in ["choice", "searchCriteria"]):
-        return True
-    else:
-        return False
+    decoded = etree.tostring(complex_type[0], pretty_print=True).decode("utf-8")
+    return decoded
 
 
 def soap_call(connection, payload, request, element):
@@ -278,14 +286,21 @@ def soap_call(connection, payload, request, element):
                 result = getattr(connection, request)(**item)
             else:
                 result = getattr(connection, request)(item)
+
             print(f"{datetime.now().strftime('%b %d %H:%M:%S')}: Information in row {row + 1} submitted")
+
+            result = serialize_object(result, target_cls=dict)
+
+            if "SQL" in request:
+                result = {'return':{str(i): {sql_item.tag: sql_item.text for sql_item in sql_list} for i, sql_list in enumerate(result['return']['row'])}}
+
+
             print(f"{datetime.now().strftime('%b %d %H:%M:%S')}: Return: {result['return']}")
-            result_list.append(serialize_object(result, target_cls=dict))
+            result_list.append(result)
         except Exception as error:
             print(f"{datetime.now().strftime('%b %d %H:%M:%S')}: ERROR: Error adding line: {str(error)}")
             result_list.append({"return": None})
     return result_list
-
 
 def main(argv):
     """
