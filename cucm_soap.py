@@ -1,3 +1,6 @@
+from cryptography import x509
+from cryptography.hazmat.backends import default_backend
+from cryptography.hazmat.primitives import serialization
 from datetime import datetime
 from lxml import etree
 from requests import Session
@@ -7,6 +10,7 @@ from zeep import Client
 from zeep.cache import SqliteCache
 from zeep.helpers import serialize_object
 from zeep.transports import Transport
+import base64
 import getopt
 import json
 import openpyxl
@@ -294,6 +298,11 @@ def soap_call(connection, payload, request, element):
             if "SQL" in request:
                 result = {'return':{str(i): {sql_item.tag: sql_item.text for sql_item in sql_list} for i, sql_list in enumerate(result['return']['row'])}}
 
+            if "certificate" in str(result):
+                for sql_item in result['return'].values():
+                    sql_item['certificate'] = sql_item['certificate'].replace("-----BEGIN CERTIFICATE-----", "").replace("-----END CERTIFICATE-----", "").strip()
+                    cert = x509.load_der_x509_certificate(base64.b64decode(sql_item['certificate']), default_backend())
+                    sql_item['certificate'] = {"Not Valid Before": cert.not_valid_before, "Not Valid After" : cert.not_valid_after}
 
             print(f"{datetime.now().strftime('%b %d %H:%M:%S')}: Return: {result['return']}")
             result_list.append(result)
