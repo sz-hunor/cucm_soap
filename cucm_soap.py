@@ -14,6 +14,7 @@ import base64
 import getopt
 import json
 import openpyxl
+import pprint
 import re
 import sys
 
@@ -260,7 +261,12 @@ def check_if_element(request, xsd):
 
 
 def get_xml_schema(request, xsd):
-    #parses lxml.etree elements to string based on provided xsd
+    """
+    looks up the definition for the lxml.etree element in the provided xsd and returns it in string form
+    :param request: soap function call to be checked
+    :param xsd: xml schema file to do the lookup in
+    :return: the definition of the xml element in text form
+    """
     xsd_ns = {"xsd": "http://www.w3.org/2001/XMLSchema"}
     tree = etree.parse(xsd)
 
@@ -294,17 +300,22 @@ def soap_call(connection, payload, request, element):
             print(f"{datetime.now().strftime('%b %d %H:%M:%S')}: Information in row {row + 1} submitted")
 
             result = serialize_object(result, target_cls=dict)
-
+            
+            #The returned SOAP objects for any SQL querry have a different format to other objects, this section normalizes SQL soap objects
             if "SQL" in request:
                 result = {'return':{str(i): {sql_item.tag: sql_item.text for sql_item in sql_list} for i, sql_list in enumerate(result['return']['row'])}}
-
+            """
+            Certificates stored in the SQL database are encoded in X.509 .der format, this section decodes the certificates
+            The SQL database contains all information which is also in a decoded certificate except certificate validity periods, this section replaces
+            the certificate field with validity information
+            """
             if "certificate" in str(result):
                 for sql_item in result['return'].values():
                     sql_item['certificate'] = sql_item['certificate'].replace("-----BEGIN CERTIFICATE-----", "").replace("-----END CERTIFICATE-----", "").strip()
                     cert = x509.load_der_x509_certificate(base64.b64decode(sql_item['certificate']), default_backend())
                     sql_item['certificate'] = {"Not Valid Before": cert.not_valid_before, "Not Valid After" : cert.not_valid_after}
 
-            print(f"{datetime.now().strftime('%b %d %H:%M:%S')}: Return: {result['return']}")
+            print(f"{datetime.now().strftime('%b %d %H:%M:%S')}: Return: {pprint.pformat(result['return'], sort_dicts=False)}")
             result_list.append(result)
         except Exception as error:
             print(f"{datetime.now().strftime('%b %d %H:%M:%S')}: ERROR: Error adding line: {str(error)}")
