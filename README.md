@@ -2,7 +2,8 @@
 
 ## Overview
 
-The aim of this script is to leverage data in Excel tables to make AXL SOAP requests to Cisco Unified Communications Manager
+The aim of this script is to leverage data in Excel tables to make AXL SOAP requests to Cisco Unified Communications Manager and IMP
+CUC is not currently supported due to the syntax being a bit different
 
 It is intended to be a command line tool, with parameters passed to it via arguments
 
@@ -248,3 +249,7 @@ This script can be used to send any arbitrary data as any arbitrary AXL SOAP req
 over-write, delete or otherwise damage existing configuration
 
 Use caution, use test labs, use test data and familiarize yourself with the quirks of SOAP
+
+## Useful examples
+Retreiving certificate related data:
+```python cucm_soap.py --cucm=<value> --user=<value> --pass=<value> --req_json="{'sql':'select certificate.servername, typecertificateservice.name, certificate.serialnumber, certificate.certificate, certificate.subjectname, certificate.issuername from certificate inner join certificateservicecertificatemap on certificate.pkid = certificateservicecertificatemap.fkcertificate inner join typecertificateservice on certificateservicecertificatemap.tkcertificateservice = typecertificateservice.enum'}" --request=executeSQLQuery --output=<value>```
